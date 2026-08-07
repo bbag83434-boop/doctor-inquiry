@@ -20,6 +20,11 @@ const AppointmentsScreen = lazy(() => import('./screens/AppointmentsScreen.jsx')
 const AppointmentDetailsScreen = lazy(() => import('./screens/AppointmentDetailsScreen.jsx').then((module) => ({ default: module.AppointmentDetailsScreen })));
 const NotificationsScreen = lazy(() => import('./screens/NotificationsScreen.jsx').then((module) => ({ default: module.NotificationsScreen })));
 const NotificationDetailsScreen = lazy(() => import('./screens/NotificationDetailsScreen.jsx').then((module) => ({ default: module.NotificationDetailsScreen })));
+const ProfileScreen = lazy(() => import('./screens/ProfileScreen.jsx').then((module) => ({ default: module.ProfileScreen })));
+const EditProfileScreen = lazy(() => import('./screens/EditProfileScreen.jsx').then((module) => ({ default: module.EditProfileScreen })));
+const SettingsScreen = lazy(() => import('./screens/SettingsScreen.jsx').then((module) => ({ default: module.SettingsScreen })));
+const HelpSupportScreen = lazy(() => import('./screens/HelpSupportScreen.jsx').then((module) => ({ default: module.HelpSupportScreen })));
+const ContactUsScreen = lazy(() => import('./screens/ContactUsScreen.jsx').then((module) => ({ default: module.ContactUsScreen })));
 
 function App() {
   return (
@@ -41,6 +46,11 @@ function App() {
                   <Route path="/appointments/:appointmentId" element={<ProtectedRoute><AppointmentDetailsScreen /></ProtectedRoute>} />
                   <Route path="/notifications" element={<ProtectedRoute><NotificationsScreen /></ProtectedRoute>} />
                   <Route path="/notifications/:notificationId" element={<ProtectedRoute><NotificationDetailsScreen /></ProtectedRoute>} />
+                  <Route path="/profile" element={<ProtectedRoute><ProfileScreen /></ProtectedRoute>} />
+                  <Route path="/profile/edit" element={<ProtectedRoute><EditProfileScreen /></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute><SettingsScreen /></ProtectedRoute>} />
+                  <Route path="/help-support" element={<ProtectedRoute><HelpSupportScreen /></ProtectedRoute>} />
+                  <Route path="/contact-us" element={<ProtectedRoute><ContactUsScreen /></ProtectedRoute>} />
                   <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>
               </Suspense>

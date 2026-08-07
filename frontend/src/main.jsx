@@ -9,6 +9,7 @@ import './styles/appointments.css';
 import './styles/appointment-list.css';
 import './styles/notifications.css';
 import './styles/experience.css';
+import './styles/profile.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
