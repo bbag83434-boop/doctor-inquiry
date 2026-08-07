@@ -73,6 +73,7 @@ button { cursor: pointer; }
 .bottom-nav__inner { display: flex; width: min(100%, 520px); justify-content: space-around; }
 .bottom-nav__item { display: grid; min-width: 62px; gap: 3px; place-items: center; color: var(--ink-muted); font-size: .68rem; font-weight: 600; background: transparent; border: 0; }
 .bottom-nav__item--active { color: var(--primary); }
+.bottom-nav__icon--badge{position:relative}.bottom-nav__icon--badge i{position:absolute;top:-9px;right:-13px;display:grid;min-width:16px;height:16px;padding:0 3px;place-items:center;color:#fff;background:#ec5a6a;border:2px solid var(--surface);border-radius:99px;font-family:'DM Sans',sans-serif;font-size:.53rem;font-style:normal;font-weight:800}
 
 .splash { display: grid; min-height: 100dvh; place-items: center; overflow: hidden; padding: 28px; background: radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--primary) 18%, transparent), transparent 33%), var(--canvas); }
 .splash__panel { width: min(100%, 400px); text-align: center; }

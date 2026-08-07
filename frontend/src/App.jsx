@@ -7,6 +7,7 @@ import { ThemeProvider } from './context/ThemeContext.jsx';
 import { AppExperience } from './components/AppExperience.jsx';
 import { GlobalLoader } from './components/GlobalLoader.jsx';
 import { GlobalLoadingProvider } from './context/GlobalLoadingContext.jsx';
+import { NotificationsProvider } from './context/NotificationsContext.jsx';
 
 // Route modules stay out of the first bundle and load on demand.
 const LoginScreen = lazy(() => import('./screens/LoginScreen.jsx').then((module) => ({ default: module.LoginScreen })));
@@ -17,6 +18,8 @@ const BookAppointmentScreen = lazy(() => import('./screens/BookAppointmentScreen
 const AppointmentSuccessScreen = lazy(() => import('./screens/AppointmentSuccessScreen.jsx').then((module) => ({ default: module.AppointmentSuccessScreen })));
 const AppointmentsScreen = lazy(() => import('./screens/AppointmentsScreen.jsx').then((module) => ({ default: module.AppointmentsScreen })));
 const AppointmentDetailsScreen = lazy(() => import('./screens/AppointmentDetailsScreen.jsx').then((module) => ({ default: module.AppointmentDetailsScreen })));
+const NotificationsScreen = lazy(() => import('./screens/NotificationsScreen.jsx').then((module) => ({ default: module.NotificationsScreen })));
+const NotificationDetailsScreen = lazy(() => import('./screens/NotificationDetailsScreen.jsx').then((module) => ({ default: module.NotificationDetailsScreen })));
 
 function App() {
   return (
@@ -24,7 +27,7 @@ function App() {
       <AuthProvider>
         <GlobalLoadingProvider>
           <BrowserRouter>
-            <AppExperience>
+            <NotificationsProvider><AppExperience>
               <Suspense fallback={<GlobalLoader message="Loading your care space..." />}>
                 <Routes>
                   <Route path="/" element={<Navigate to="/login" replace />} />
@@ -36,10 +39,12 @@ function App() {
                   <Route path="/appointments/success" element={<ProtectedRoute><AppointmentSuccessScreen /></ProtectedRoute>} />
                   <Route path="/appointments" element={<ProtectedRoute><AppointmentsScreen /></ProtectedRoute>} />
                   <Route path="/appointments/:appointmentId" element={<ProtectedRoute><AppointmentDetailsScreen /></ProtectedRoute>} />
+                  <Route path="/notifications" element={<ProtectedRoute><NotificationsScreen /></ProtectedRoute>} />
+                  <Route path="/notifications/:notificationId" element={<ProtectedRoute><NotificationDetailsScreen /></ProtectedRoute>} />
                   <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>
               </Suspense>
-            </AppExperience>
+            </AppExperience></NotificationsProvider>
           </BrowserRouter>
         </GlobalLoadingProvider>
       </AuthProvider>
