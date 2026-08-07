@@ -1,33 +1,35 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import packageJson from './package.json' with { type: 'json' };
 
 export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
-      manifest: {
-        name: 'Doctor Inquiry',
-        short_name: 'DocInquiry',
-        description: 'Professional inquiry management for doctors',
-        theme_color: '#f4f7fb',
-        icons: [
+      registerType: 'prompt',
+      injectRegister: false,
+      manifest: false,
+      includeAssets: ['favicon.svg', 'apple-touch-icon.png', 'icons/*.png'],
+      workbox: {
+        cacheId: `doctor-inquiry-v${packageJson.version}`,
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: false,
+        navigateFallback: '/index.html',
+        runtimeCaching: [
           {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
+            urlPattern: ({ url }) => url.pathname.startsWith('/api/'),
+            handler: 'NetworkFirst',
+            options: { cacheName: 'doctor-inquiry-api', networkTimeoutSeconds: 8, expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 } },
           },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
-          }
-        ]
-      }
+        ],
+      },
     })
   ],
+  define: {
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(packageJson.version),
+  },
   server: {
     proxy: {
       '/api': {

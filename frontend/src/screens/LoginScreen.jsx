@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../components/Button.jsx';
 import { Loader } from '../components/Loader.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useTheme } from '../context/ThemeContext.jsx';
+import { useGlobalLoading } from '../context/GlobalLoadingContext.jsx';
 
 const MOBILE_PATTERN = /^[6-9]\d{9}$/;
 
 export function LoginScreen() {
   const { login } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { beginLoading } = useGlobalLoading();
   const navigate = useNavigate();
   const location = useLocation();
   const [values, setValues] = useState({ mobileNumber: '', password: '', rememberMe: true });
@@ -17,6 +19,9 @@ export function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
+
+  // Preload the next likely route while the user enters credentials.
+  useEffect(() => { import('./HomeDashboard.jsx'); }, []);
 
   const updateValue = (event) => {
     const { name, type, checked, value } = event.target;
@@ -39,12 +44,14 @@ export function LoginScreen() {
     if (!validate()) return;
 
     setIsSubmitting(true);
+    const finishLoading = beginLoading('Signing you in...');
     try {
       await login(values);
       navigate(location.state?.from?.pathname || '/home', { replace: true });
     } catch {
       setSubmitError('We could not sign you in. Please try again.');
     } finally {
+      finishLoading();
       setIsSubmitting(false);
     }
   };

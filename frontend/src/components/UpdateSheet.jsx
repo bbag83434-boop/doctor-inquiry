@@ -1,0 +1,4 @@
+/** Lets the user explicitly activate a waiting service worker; it never auto-refreshes. */
+export function UpdateSheet({ onUpdate, onLater }) {
+  return <section className="experience-sheet experience-sheet--update" role="dialog" aria-modal="true" aria-labelledby="update-title"><div className="experience-sheet__handle" /><div className="experience-sheet__icon">↻</div><p className="experience-sheet__eyebrow">VERSION {import.meta.env.VITE_APP_VERSION || 'latest'}</p><h2 id="update-title">New Update Available</h2><p>A faster and better version of Doctor Inquiry is ready.</p><div className="experience-sheet__actions"><button className="experience-sheet__primary" type="button" onClick={onUpdate}>Update Now</button><button className="experience-sheet__later" type="button" onClick={onLater}>Later</button></div></section>;
+}

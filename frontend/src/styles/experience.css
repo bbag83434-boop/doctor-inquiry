@@ -1,0 +1,41 @@
+/* Native-like PWA install, update, loading and splash animations. */
+html { overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
+body { overscroll-behavior-y: none; touch-action: pan-x pan-y; }
+#root { min-height: 100dvh; }
+.app-transition { animation: route-enter .26s cubic-bezier(.2,.85,.3,1) both; }
+.route-changing .app-transition { opacity: .7; filter: blur(1px); }
+.global-loader { position: fixed; z-index: 40; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(16, 23, 34, .18); backdrop-filter: blur(5px); animation: experience-fade .18s ease-out; }
+.global-loader__card { display: inline-flex; align-items: center; gap: 12px; max-width: min(92vw, 300px); padding: 16px 18px; color: #fff; background: rgba(17, 29, 54, .88); border: 1px solid rgba(255,255,255,.18); border-radius: 18px; box-shadow: 0 18px 45px rgba(9,20,48,.28); font-weight: 700; }
+.global-loader__card .loader { border-color: rgba(255,255,255,.28); border-top-color: #fff; }
+.experience-sheet { position: fixed; z-index: 35; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); left: 12px; max-width: 560px; margin: auto; padding: 12px 24px calc(24px + env(safe-area-inset-bottom)); color: #fff; background: linear-gradient(145deg, rgba(43, 76, 174, .94), rgba(23, 41, 100, .96)); border: 1px solid rgba(255,255,255,.25); border-radius: 30px; box-shadow: 0 24px 60px rgba(14, 31, 76, .38); backdrop-filter: blur(22px) saturate(160%); animation: sheet-enter .55s cubic-bezier(.18,.88,.28,1.12) both; }
+.experience-sheet--update { background: linear-gradient(145deg, rgba(26, 123, 145, .94), rgba(26, 64, 127, .96)); }
+.experience-sheet__handle { width: 42px; height: 4px; margin: 0 auto 19px; background: rgba(255,255,255,.45); border-radius: 999px; }
+.experience-sheet__icon { display: grid; width: 48px; height: 48px; margin-bottom: 15px; place-items: center; color: #3158d7; background: #fff; border-radius: 16px; box-shadow: 0 9px 20px rgba(0,0,0,.15); font-size: 1.9rem; font-weight: 800; }
+.experience-sheet__eyebrow { margin: 0 0 7px; color: rgba(255,255,255,.7); font-size: .68rem; font-weight: 800; letter-spacing: .14em; }
+.experience-sheet h2 { margin: 0; font-family: Manrope, sans-serif; font-size: 1.35rem; letter-spacing: -.045em; }
+.experience-sheet p:not(.experience-sheet__eyebrow) { max-width: 390px; margin: 8px 0 21px; color: rgba(255,255,255,.84); line-height: 1.45; }
+.experience-sheet__actions { display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px; }
+.experience-sheet button { min-height: 48px; border-radius: 14px; border: 0; font: inherit; font-weight: 800; }
+.experience-sheet__primary { color: #264bbd; background: #fff; box-shadow: 0 8px 18px rgba(0,0,0,.12); }
+.experience-sheet__later { color: #fff; background: rgba(255,255,255,.13); }
+.splash { background: radial-gradient(circle at 22% 15%, rgba(140, 182, 255, .65), transparent 25%), radial-gradient(circle at 83% 86%, rgba(101, 85, 255, .48), transparent 28%), linear-gradient(145deg, #162b73, #3158d7 52%, #4c7bf5); }
+.splash__panel { position: relative; z-index: 1; animation: splash-in .8s cubic-bezier(.16,.85,.25,1) both; }
+.splash h1, .splash p, .splash__loading { color: #fff; }
+.splash p { color: rgba(255,255,255,.79); }
+.splash__orb { animation: heartbeat 1.35s ease-in-out infinite; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28); box-shadow: 0 22px 54px rgba(7, 22, 77, .35); backdrop-filter: blur(12px); }
+.splash__orb::before, .splash__orb::after { border-color: rgba(255,255,255,.24); animation: ripple 2s ease-out infinite; }
+.splash__orb::after { animation-delay: .55s; }
+.splash__progress { width: 170px; height: 4px; margin: 26px auto 0; overflow: hidden; background: rgba(255,255,255,.2); border-radius: 99px; }
+.splash__progress span { display: block; width: 55%; height: 100%; background: #fff; border-radius: inherit; animation: progress 1.4s ease-in-out infinite; }
+.splash__particles i { position: absolute; width: 7px; height: 7px; background: rgba(255,255,255,.65); border-radius: 50%; filter: blur(.4px); animation: float 4s ease-in-out infinite; }
+.splash__particles i:nth-child(1) { top: 16%; left: 13%; }.splash__particles i:nth-child(2) { top: 28%; right: 17%; animation-delay: -.7s; }.splash__particles i:nth-child(3) { bottom: 23%; left: 20%; animation-delay: -1.5s; }.splash__particles i:nth-child(4) { right: 27%; bottom: 13%; animation-delay: -2.2s; }.splash__particles i:nth-child(5) { top: 10%; left: 50%; animation-delay: -3s; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+@keyframes route-enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+@keyframes experience-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sheet-enter { from { opacity: 0; transform: translateY(120%) scale(.94); filter: blur(10px); } to { opacity: 1; transform: translateY(0) scale(1); filter: none; } }
+@keyframes splash-in { from { opacity: 0; transform: translateY(18px) scale(.95); filter: blur(12px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes heartbeat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.06); } 30% { transform: scale(.99); } 45% { transform: scale(1.035); } }
+@keyframes ripple { from { transform: scale(.72); opacity: .8; } to { transform: scale(1.2); opacity: 0; } }
+@keyframes progress { from { transform: translateX(-120%); } to { transform: translateX(310%); } }
+@keyframes float { 50% { transform: translateY(-18px) translateX(7px); opacity: .2; } }
+@media (prefers-reduced-motion: reduce) { .app-transition, .experience-sheet, .splash__panel { animation: none; } }
