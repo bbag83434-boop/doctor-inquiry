@@ -1,5 +1,6 @@
 /** Centralised loading state for API work, lazy modules and route transitions. */
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { subscribeToApiLoading } from '../services/apiEvents.js';
 
 const GlobalLoadingContext = createContext(null);
 
@@ -16,6 +17,10 @@ export function GlobalLoadingProvider({ children }) {
       finished = true;
     };
   }, []);
+
+  useEffect(() => subscribeToApiLoading((isLoading) => {
+    setPendingCount((count) => Math.max(0, count + (isLoading ? 1 : -1)));
+  }), []);
 
   const value = useMemo(() => ({ isLoading: pendingCount > 0, message, beginLoading }), [beginLoading, message, pendingCount]);
   return <GlobalLoadingContext.Provider value={value}>{children}</GlobalLoadingContext.Provider>;
