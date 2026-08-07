@@ -13,6 +13,8 @@ const LoginScreen = lazy(() => import('./screens/LoginScreen.jsx').then((module)
 const HomeDashboard = lazy(() => import('./screens/HomeDashboard.jsx').then((module) => ({ default: module.HomeDashboard })));
 const DoctorsScreen = lazy(() => import('./screens/DoctorsScreen.jsx').then((module) => ({ default: module.DoctorsScreen })));
 const DoctorDetailsScreen = lazy(() => import('./screens/DoctorDetailsScreen.jsx').then((module) => ({ default: module.DoctorDetailsScreen })));
+const BookAppointmentScreen = lazy(() => import('./screens/BookAppointmentScreen.jsx').then((module) => ({ default: module.BookAppointmentScreen })));
+const AppointmentSuccessScreen = lazy(() => import('./screens/AppointmentSuccessScreen.jsx').then((module) => ({ default: module.AppointmentSuccessScreen })));
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
                   <Route path="/home" element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
                   <Route path="/doctors" element={<ProtectedRoute><DoctorsScreen /></ProtectedRoute>} />
                   <Route path="/doctors/:doctorId" element={<ProtectedRoute><DoctorDetailsScreen /></ProtectedRoute>} />
+                  <Route path="/doctors/:doctorId/book" element={<ProtectedRoute><BookAppointmentScreen /></ProtectedRoute>} />
+                  <Route path="/appointments/success" element={<ProtectedRoute><AppointmentSuccessScreen /></ProtectedRoute>} />
                   <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>
               </Suspense>
