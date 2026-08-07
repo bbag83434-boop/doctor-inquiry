@@ -3,7 +3,7 @@ import { ProtectedRoute } from './components/ProtectedRoute.jsx';
 import { PublicOnlyRoute } from './components/PublicOnlyRoute.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { ThemeProvider } from './context/ThemeContext.jsx';
-import { HomePlaceholder } from './screens/HomePlaceholder.jsx';
+import { HomeDashboard } from './screens/HomeDashboard.jsx';
 import { LoginScreen } from './screens/LoginScreen.jsx';
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<PublicOnlyRoute><LoginScreen /></PublicOnlyRoute>} />
-            <Route path="/home" element={<ProtectedRoute><HomePlaceholder /></ProtectedRoute>} />
+            <Route path="/home" element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </BrowserRouter>
