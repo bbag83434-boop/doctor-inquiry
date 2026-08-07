@@ -12,7 +12,7 @@ export default defineConfig({
         name: 'Doctor Inquiry',
         short_name: 'DocInquiry',
         description: 'Professional inquiry management for doctors',
-        theme_color: '#ffffff',
+        theme_color: '#f4f7fb',
         icons: [
           {
             src: 'pwa-192x192.png',

@@ -1,11 +1,17 @@
-import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ThemeProvider } from './context/ThemeContext.jsx';
+import { SplashScreen } from './screens/SplashScreen.jsx';
 
 function App() {
   return (
-    <div className="app">
-      <h1>Doctor Inquiry</h1>
-      <p>Welcome to the Doctor Inquiry platform.</p>
-    </div>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<SplashScreen />} />
+          <Route path="*" element={<SplashScreen />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
