@@ -15,6 +15,8 @@ const DoctorsScreen = lazy(() => import('./screens/DoctorsScreen.jsx').then((mod
 const DoctorDetailsScreen = lazy(() => import('./screens/DoctorDetailsScreen.jsx').then((module) => ({ default: module.DoctorDetailsScreen })));
 const BookAppointmentScreen = lazy(() => import('./screens/BookAppointmentScreen.jsx').then((module) => ({ default: module.BookAppointmentScreen })));
 const AppointmentSuccessScreen = lazy(() => import('./screens/AppointmentSuccessScreen.jsx').then((module) => ({ default: module.AppointmentSuccessScreen })));
+const AppointmentsScreen = lazy(() => import('./screens/AppointmentsScreen.jsx').then((module) => ({ default: module.AppointmentsScreen })));
+const AppointmentDetailsScreen = lazy(() => import('./screens/AppointmentDetailsScreen.jsx').then((module) => ({ default: module.AppointmentDetailsScreen })));
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
                   <Route path="/doctors/:doctorId" element={<ProtectedRoute><DoctorDetailsScreen /></ProtectedRoute>} />
                   <Route path="/doctors/:doctorId/book" element={<ProtectedRoute><BookAppointmentScreen /></ProtectedRoute>} />
                   <Route path="/appointments/success" element={<ProtectedRoute><AppointmentSuccessScreen /></ProtectedRoute>} />
+                  <Route path="/appointments" element={<ProtectedRoute><AppointmentsScreen /></ProtectedRoute>} />
+                  <Route path="/appointments/:appointmentId" element={<ProtectedRoute><AppointmentDetailsScreen /></ProtectedRoute>} />
                   <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>
               </Suspense>

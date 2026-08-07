@@ -6,6 +6,7 @@ import './styles/auth.css';
 import './styles/dashboard.css';
 import './styles/doctors.css';
 import './styles/appointments.css';
+import './styles/appointment-list.css';
 import './styles/experience.css';
 
 createRoot(document.getElementById('root')).render(
