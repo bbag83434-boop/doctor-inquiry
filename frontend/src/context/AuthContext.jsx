@@ -1,45 +1,61 @@
-import { createContext, useContext, useMemo, useState } from 'react';
-import { loginWithMobile } from '../services/authApi.js';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { configureAuthRefresh, setAccessToken } from '../services/apiClient.js';
+import { authenticationService } from '../services/authenticationService.js';
 
 const AuthContext = createContext(null);
-const AUTH_STORAGE_KEY = 'doctor-inquiry-auth';
-
-function readStoredSession() {
-  try {
-    return JSON.parse(localStorage.getItem(AUTH_STORAGE_KEY)) || null;
-  } catch {
-    localStorage.removeItem(AUTH_STORAGE_KEY);
-    return null;
-  }
-}
 
 export function AuthProvider({ children }) {
-  const [session, setSession] = useState(readStoredSession);
+  const [session, setSession] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const login = async ({ mobileNumber, password, rememberMe }) => {
-    const nextSession = await loginWithMobile({ mobileNumber, password });
-    setSession(nextSession);
+  const establishSession = useCallback(async (nextSession) => {
+    setAccessToken(nextSession.accessToken);
+    const user = await authenticationService.getCurrentUser();
+    const resolvedSession = { ...nextSession, user };
+    setSession(resolvedSession);
+    return resolvedSession;
+  }, []);
 
-    if (rememberMe) {
-      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(nextSession));
-    } else {
-      localStorage.removeItem(AUTH_STORAGE_KEY);
+  const login = useCallback(async ({ mobileNumber, password, rememberMe }) => {
+    const nextSession = await authenticationService.login({ mobileNumber, password, rememberMe });
+    return establishSession(nextSession);
+  }, [establishSession]);
+
+  const logout = useCallback(async () => {
+    try {
+      await authenticationService.logout();
+    } finally {
+      setAccessToken(null);
+      setSession(null);
     }
+  }, []);
 
-    return nextSession;
-  };
+  const refreshSession = useCallback(async () => {
+    const nextSession = await authenticationService.refresh();
+    return establishSession(nextSession);
+  }, [establishSession]);
 
-  const logout = () => {
-    localStorage.removeItem(AUTH_STORAGE_KEY);
-    setSession(null);
-  };
+  const getCurrentUser = useCallback(async () => {
+    const user = await authenticationService.getCurrentUser();
+    setSession((current) => current ? { ...current, user } : current);
+    return user;
+  }, []);
+
+  useEffect(() => {
+    configureAuthRefresh(refreshSession);
+    refreshSession().catch(() => { setAccessToken(null); setSession(null); }).finally(() => setIsLoading(false));
+    return () => configureAuthRefresh(null);
+  }, [refreshSession]);
 
   const value = useMemo(() => ({
-    isAuthenticated: Boolean(session?.token),
+    isAuthenticated: Boolean(session?.accessToken && session?.user),
+    isLoading,
     login,
     logout,
+    refreshSession,
+    getCurrentUser,
     user: session?.user ?? null,
-  }), [session]);
+  }), [session, isLoading, login, logout, refreshSession, getCurrentUser]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

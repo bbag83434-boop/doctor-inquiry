@@ -1,23 +1,35 @@
-const DEMO_DELAY_MS = 750;
+import { apiClient, setAccessToken } from './apiClient.js';
 
-/**
- * Temporary client-side API contract for Phase 3.
- * Replace this function with the backend endpoint when the API is available.
- */
-export async function loginWithMobile({ mobileNumber, password }) {
-  await new Promise((resolve) => window.setTimeout(resolve, DEMO_DELAY_MS));
+function saveAccessToken(response) {
+  const session = response.data.data;
+  setAccessToken(session.accessToken);
+  return session;
+}
 
-  if (!mobileNumber || !password) {
-    throw new Error('Mobile number and password are required.');
+export async function registerAccount(payload) {
+  const response = await apiClient.post('/auth/register', payload);
+  return saveAccessToken(response);
+}
+
+export async function loginWithMobile({ mobileNumber, password, rememberMe }) {
+  const response = await apiClient.post('/auth/login', { mobileNumber, password, rememberMe });
+  return saveAccessToken(response);
+}
+
+export async function refreshAuthentication() {
+  const response = await apiClient.post('/auth/refresh');
+  return saveAccessToken(response);
+}
+
+export async function getCurrentAuthenticatedUser() {
+  const response = await apiClient.get('/auth/me');
+  return response.data.data.user;
+}
+
+export async function logoutFromApi() {
+  try {
+    await apiClient.post('/auth/logout');
+  } finally {
+    setAccessToken(null);
   }
-
-  return {
-    token: `demo-token-${Date.now()}`,
-    user: {
-      id: 'demo-user-001',
-      name: 'Demo Patient',
-      mobileNumber,
-      role: 'patient',
-    },
-  };
 }

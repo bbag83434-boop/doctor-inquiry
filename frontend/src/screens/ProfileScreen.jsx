@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BottomNavigation } from '../components/BottomNavigation.jsx';
 import { getProfile } from '../data/profile.js';
+import { useAuth } from '../context/AuthContext.jsx';
 
 const details = [
   ['Mobile number', 'mobile', '☎'],
@@ -13,7 +14,9 @@ const details = [
 
 export function ProfileScreen() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [profile, setProfile] = useState(getProfile);
+  const displayedProfile = { ...profile, fullName: user?.fullName ?? profile.fullName, mobile: user?.mobileNumber ?? profile.mobile, email: user?.email ?? profile.email };
 
   useEffect(() => {
     const syncProfile = () => setProfile(getProfile());
@@ -26,16 +29,16 @@ export function ProfileScreen() {
       <section className="profile-hero">
         <div className="profile-hero__glow" />
         <button type="button" className="profile-hero__settings" onClick={() => navigate('/settings')} aria-label="Open settings">⚙</button>
-        <div className="profile-avatar" aria-label={`${profile.fullName} profile photo`}>{profile.photo}</div>
+        <div className="profile-avatar" aria-label={`${displayedProfile.fullName} profile photo`}>{displayedProfile.photo}</div>
         <p>Your care profile</p>
-        <h1>{profile.fullName}</h1>
+        <h1>{displayedProfile.fullName}</h1>
         <span>Member since 2024</span>
         <button type="button" className="profile-edit-button" onClick={() => navigate('/profile/edit')}>Edit profile <b aria-hidden="true">›</b></button>
       </section>
 
       <section className="profile-card" aria-labelledby="personal-details-title">
         <div className="profile-section-heading"><div><p>Personal information</p><h2 id="personal-details-title">Your details</h2></div><button type="button" onClick={() => navigate('/profile/edit')}>Edit</button></div>
-        <div className="profile-details">{details.map(([label, key, icon]) => <div className="profile-detail" key={key}><span className="profile-detail__icon" aria-hidden="true">{icon}</span><div><small>{label}</small><strong>{profile[key]}</strong></div></div>)}</div>
+        <div className="profile-details">{details.map(([label, key, icon]) => <div className="profile-detail" key={key}><span className="profile-detail__icon" aria-hidden="true">{icon}</span><div><small>{label}</small><strong>{displayedProfile[key]}</strong></div></div>)}</div>
       </section>
 
       <section className="profile-shortcuts" aria-label="Profile shortcuts">

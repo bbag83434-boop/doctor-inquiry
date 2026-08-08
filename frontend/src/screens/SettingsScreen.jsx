@@ -11,7 +11,7 @@ export function SettingsScreen() {
   const [settings, setSettings] = useState(getSettings);
   const [dialog, setDialog] = useState(null);
   const update = (next) => { const updated = { ...settings, ...next }; setSettings(updated); saveSettings(updated); };
-  const logoutNow = () => { logout(); navigate('/login', { replace: true }); };
+  const logoutNow = async () => { try { await logout(); } finally { navigate('/login', { replace: true }); } };
   const info = { privacy: ['Privacy policy', 'Your personal data is used only to make this placeholder care experience feel personal. No profile data is sent to a server.'], terms: ['Terms & conditions', 'This is a demo experience using placeholder data. It does not provide medical advice or replace a healthcare professional.'], about: ['About Doctor Inquiry', 'Doctor Inquiry helps people organize care, appointments and useful health information in one calm space. Version 1.0.0.'], password: ['Change password', 'Password changing is available as a user-interface preview in this phase. No authentication settings are changed.'] };
 
   return <div className="profile-shell app-transition"><main className="profile-page profile-page--subpage">

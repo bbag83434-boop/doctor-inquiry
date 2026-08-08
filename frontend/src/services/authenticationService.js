@@ -1,7 +1,9 @@
-import { apiNotAvailable } from './apiPlaceholder.js';
+import { getCurrentAuthenticatedUser, loginWithMobile, logoutFromApi, refreshAuthentication, registerAccount } from './authApi.js';
 
 export const authenticationService = {
-  login: () => apiNotAvailable('Authentication'),
-  logout: () => apiNotAvailable('Authentication'),
-  register: () => apiNotAvailable('Authentication'),
+  login: loginWithMobile,
+  logout: logoutFromApi,
+  register: registerAccount,
+  refresh: refreshAuthentication,
+  getCurrentUser: getCurrentAuthenticatedUser,
 };

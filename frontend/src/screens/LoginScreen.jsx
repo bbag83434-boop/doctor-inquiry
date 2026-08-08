@@ -48,8 +48,8 @@ export function LoginScreen() {
     try {
       await login(values);
       navigate(location.state?.from?.pathname || '/home', { replace: true });
-    } catch {
-      setSubmitError('We could not sign you in. Please try again.');
+    } catch (error) {
+      setSubmitError(error.message || 'We could not sign you in. Please try again.');
     } finally {
       finishLoading();
       setIsSubmitting(false);
@@ -101,7 +101,7 @@ export function LoginScreen() {
           {isSubmitting ? <><Loader label="Signing in" /> Signing in…</> : 'Sign in securely'}
         </Button>
       </form>
-      <p className="auth-panel__note">Demo mode: use any valid 10-digit mobile number and a password of 6 or more characters.</p>
+      <p className="auth-panel__note">Sign in with the mobile number and password used when you created your account.</p>
     </section>
   </main>;
 }
