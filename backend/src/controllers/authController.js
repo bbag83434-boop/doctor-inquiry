@@ -17,7 +17,13 @@ function safeUser(user) {
   return { id: user.id, fullName: user.fullName, name: user.fullName, mobileNumber: user.phone, email: user.email, role: user.role.toLowerCase() };
 }
 
-function normalizeMobile(value) { return String(value ?? '').replace(/\D/g, ''); }
+function normalizeMobile(value) {
+  let s = String(value ?? '').replace(/\D/g, '');
+  if (s.length === 12 && s.startsWith('91')) {
+    s = s.substring(2);
+  }
+  return s;
+}
 function normalizeEmail(value) { return value ? String(value).trim().toLowerCase() : null; }
 function hashToken(value) { return crypto.createHash('sha256').update(value).digest('hex'); }
 
@@ -81,10 +87,14 @@ export async function register(req, res, next) {
 
 export async function login(req, res, next) {
   try {
-    const mobileNumber = normalizeMobile(req.body.mobileNumber);
+    const normalized = normalizeMobile(req.body.mobileNumber);
     const password = String(req.body.password ?? '');
-    if (!MOBILE_PATTERN.test(mobileNumber) || !password) throw new ApiError('Please enter your mobile number and password.', 400);
-    const user = await prisma.user.findUnique({ where: { phone: mobileNumber } });
+    if (!MOBILE_PATTERN.test(normalized) || !password) throw new ApiError('Please enter your mobile number and password.', 400);
+    let user = await prisma.user.findUnique({ where: { phone: normalized } });
+    // Compatibility for existing users stored with country code 91
+    if (!user && normalized.length === 10) {
+      user = await prisma.user.findUnique({ where: { phone: '91' + normalized } });
+    }
     const validPassword = Boolean(user?.passwordHash) && await bcrypt.compare(password, user.passwordHash);
     if (!validPassword || !user?.isActive) throw new ApiError('Invalid mobile number or password.', 401);
     const rememberMe = Boolean(req.body.rememberMe);
