@@ -101,6 +101,7 @@ export function LoginScreen() {
           {isSubmitting ? <><Loader label="Signing in" /> Signing in…</> : 'Sign in securely'}
         </Button>
       </form>
+      <p className="auth-panel__note">Don't have an account? <a href="/register" onClick={(e) => { e.preventDefault(); navigate('/register'); }}>Create account</a></p>
       <p className="auth-panel__note">Sign in with the mobile number and password used when you created your account.</p>
     </section>
   </main>;

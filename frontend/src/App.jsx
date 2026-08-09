@@ -11,6 +11,7 @@ import { NotificationsProvider } from './context/NotificationsContext.jsx';
 
 // Route modules stay out of the first bundle and load on demand.
 const LoginScreen = lazy(() => import('./screens/LoginScreen.jsx').then((module) => ({ default: module.LoginScreen })));
+const RegisterScreen = lazy(() => import('./screens/RegisterScreen.jsx').then((module) => ({ default: module.RegisterScreen })));
 const HomeDashboard = lazy(() => import('./screens/HomeDashboard.jsx').then((module) => ({ default: module.HomeDashboard })));
 const DoctorsScreen = lazy(() => import('./screens/DoctorsScreen.jsx').then((module) => ({ default: module.DoctorsScreen })));
 const DoctorDetailsScreen = lazy(() => import('./screens/DoctorDetailsScreen.jsx').then((module) => ({ default: module.DoctorDetailsScreen })));
@@ -37,6 +38,7 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Navigate to="/login" replace />} />
                   <Route path="/login" element={<PublicOnlyRoute><LoginScreen /></PublicOnlyRoute>} />
+                  <Route path="/register" element={<PublicOnlyRoute><RegisterScreen /></PublicOnlyRoute>} />
                   <Route path="/home" element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
                   <Route path="/doctors" element={<ProtectedRoute><DoctorsScreen /></ProtectedRoute>} />
                   <Route path="/doctors/:doctorId" element={<ProtectedRoute><DoctorDetailsScreen /></ProtectedRoute>} />
